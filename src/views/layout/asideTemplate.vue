@@ -149,7 +149,7 @@ export default {
     }
   },
   created () {
-    this.menus = this.$router.options.routes
+    this.menus = this.$router.options.routes[0].children
   }
 }
 </script>

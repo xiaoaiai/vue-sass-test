@@ -1,32 +1,138 @@
+<template>
+  <div :style="!$route.meta.hiddenHeaderContent ? 'margin: -24px -24px 0px;' : null">
+    <page-header v-if="!$route.meta.hiddenHeaderContent" :title="pageTitle" :logo="logo" :avatar="avatar">
+    </page-header>
+    <div class="content">
+      <div class="page-header-index-wide">
+        <slot>
+          <router-view ref="content" />
+        </slot>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script>
-export default {
-  name: 'RouteView',
-  props: {
-    keepAlive: {
-      type: Boolean,
-      default: true
+  import PageHeader from '@/components/PageHeader'
+
+  export default {
+    name: 'PageView',
+    components: {
+      PageHeader
+    },
+    props: {
+      avatar: {
+        type: String,
+        default: null
+      },
+      title: {
+        type: [String, Boolean],
+        default: true
+      },
+      logo: {
+        type: String,
+        default: null
+      },
+      directTabs: {
+        type: Object,
+        default: null
+      }
+    },
+    data () {
+      return {
+        pageTitle: null,
+        description: null,
+        linkList: [],
+        extraImage: '',
+        search: false,
+        tabs: {}
+      }
+    },
+    computed: {
+    },
+    mounted () {
+      this.tabs = this.directTabs
+      this.getPageMeta()
+    },
+    updated () {
+      this.getPageMeta()
+    },
+    methods: {
+      getPageMeta () {
+        // eslint-disable-next-line
+        this.pageTitle = (typeof(this.title) === 'string' || !this.title) ? this.title : this.$route.meta.title
+
+        const content = this.$refs.content
+        if (content) {
+          if (content.pageMeta) {
+            Object.assign(this, content.pageMeta)
+          } else {
+            this.description = content.description
+            this.linkList = content.linkList
+            this.extraImage = content.extraImage
+            this.search = content.search === true
+            this.tabs = content.tabs
+          }
+        }
+      }
     }
-  },
-  data () {
-    return {}
-  },
-  render () {
-    const { $route: { meta }, $store: { getters } } = this
-    const inKeep = (
-      <keep-alive>
-        <router-view />
-      </keep-alive>
-    )
-    const notKeep = (
-      <router-view />
-    )
-    // 这里增加了 multiTab 的判断，当开启了 multiTab 时
-    // 应当全部组件皆缓存，否则会导致切换页面后页面还原成原始状态
-    // 若确实不需要，可改为 return meta.keepAlive ? inKeep : notKeep
-    if (!getters.multiTab && !meta.keepAlive) {
-      return notKeep
-    }
-    return this.keepAlive || getters.multiTab || meta.keepAlive ? inKeep : notKeep
   }
-}
 </script>
+
+<style lang="scss" scoped>
+  .content {
+    margin: 24px 24px 0;
+    .link {
+      margin-top: 16px;
+      &:not(:empty) {
+        margin-bottom: 16px;
+      }
+      a {
+        margin-right: 32px;
+        height: 24px;
+        line-height: 24px;
+        display: inline-block;
+        i {
+          font-size: 24px;
+          margin-right: 8px;
+          vertical-align: middle;
+        }
+        span {
+          height: 24px;
+          line-height: 24px;
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+  .page-menu-search {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .page-menu-tabs {
+    margin-top: 48px;
+  }
+
+  .extra-img {
+    margin-top: -60px;
+    text-align: center;
+    width: 195px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .mobile {
+    .extra-img{
+      margin-top: 0;
+      text-align: center;
+      width: 96px;
+
+      img{
+        width: 100%;
+      }
+    }
+  }
+</style>
