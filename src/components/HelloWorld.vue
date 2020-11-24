@@ -1,5 +1,14 @@
 <template>
   <div class="hello">
+    <a-date-picker />
+    <a-time-picker />
+    <a-range-picker style=" width: 200px " />
+    <a-transfer
+      :data-source="[]"
+      show-search
+      :target-keys="[]"
+      :render="item => item.title"
+    />
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <ul>
