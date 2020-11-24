@@ -1,7 +1,12 @@
 <template>
   <a-config-provider :locale="locale">
     <a-layout id="components-layout-demo-custom-trigger">
-      <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
+      <a-layout-sider
+        v-model="collapsed"
+        :trigger="null"
+        collapsible
+        :style="!collapsed ? {flex: '0 0 256px','max-width': '256px'}: {}"
+      >
         <div class="logo"></div>
         <aside-template :collapsed="collapsed"></aside-template>
       </a-layout-sider>

@@ -18,6 +18,7 @@ export default {
   components: { subMenuTemplate },
   data() {
     return {
+      // 如果是真实的路由，使用了vue-router,可用this.$router.option.routes
       menus: [
         {
           icon: 'pie-chart',
@@ -77,7 +78,19 @@ export default {
                 {
                   // icon: 'index',
                   title: 'Option 16',
-                  path: '16'
+                  path: '16',
+                  children: [
+                    {
+                      // icon: 'index',
+                      title: 'Option 21',
+                      path: '21'
+                    },
+                    {
+                      // icon: 'index',
+                      title: 'Option 22',
+                      path: '22'
+                    }
+                  ],
                 }
               ],
             }
@@ -134,6 +147,9 @@ export default {
         },
       ]
     }
+  },
+  created () {
+    this.menus = this.$router.options.routes
   }
 }
 </script>

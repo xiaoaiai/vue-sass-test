@@ -12,11 +12,14 @@ export default new Router({
       name: 'basicPage',
       component: basicPage,
       redirect: '/HelloWorld',
+      title: '首页',
+      icon: 'home',
       children: [
         {
           path: '/HelloWorld',
           name: 'HelloWorld',
           component: HelloWorld,
+          title: '欢迎页面',
         }
       ]
     }
